@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "properties": {
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "entity_type": {
+      "type": "string"
+    },
+    "group_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "profile": {
+        "type": ["null", "object"],
+        "properties": {
+          "deactivated": {
+            "type": "boolean"
+          },
+          "email_address": {
+            "type": "string"
+          },
+          "entity_type": {
+            "type": "string"
+          },
+          "gravatar_hash": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "mention_name": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "two_factor_auth_activated": {
+            "type": "boolean"
+          }
+        }
+    },
+
+    "role": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

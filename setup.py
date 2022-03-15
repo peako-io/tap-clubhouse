@@ -24,7 +24,7 @@ setup(name='tap-clubhouse',
               'epics.json',
               'projects.json',
               'stories.json',
-              'users.json',
+              'members.json',
               'workflows.json'
           ],
       },
