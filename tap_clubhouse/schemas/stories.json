@@ -1,7 +1,16 @@
 {
   "type": "object",
   "properties": {
+    "app_url": {
+      "type": "string"
+    },
     "archived": {
+      "type": "boolean"
+    },
+    "blocked": {
+      "type": "boolean"
+    },
+    "blocker": {
       "type": "boolean"
     },
     "comment_ids": {
@@ -10,13 +19,35 @@
         "type": ["null", "integer"]
       }
     },
+    "completed": {
+      "type": "boolean"
+    },
     "completed_at": {
-      "type": ["string","null"],
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at_override": {
+      "type": "string",
       "format": "date-time"
     },
     "created_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "custom_fields": {
+       "type": "array",
+        "field_id": {
+        "type": ["null", "string"]
+         },
+        "value": {
+        "type": ["null", "string"]
+         },
+       "value_id": {
+        "type": ["null", "string"]
+       }
+     },
+    "cycle_time": {
+      "type": "integer"
     },
     "deadline": {
       "type": ["string","null"],
@@ -25,10 +56,13 @@
     "description": {
       "type": "string"
     },
+    "entity_type": {
+      "type": "string"
+    },
     "epic_id": {
       "type": ["integer","null"]
     },
-    "estiamte": {
+    "estimate": {
       "type": "integer"
     },
     "external_id": {
@@ -46,20 +80,50 @@
         "type": ["null", "string"]
       }
     },
+    "group_id": {
+      "type": "string"
+    },
+    "group_mention_ids": {
+      "type": "array",
+      "items": {
+        "type": ["null", "string"]
+      }
+    },
     "id": {
       "type": "integer"
+    },
+    "iteration_id": {
+      "type": "integer"
+    },
+    "label_ids": {
+      "type": "array",
+      "items": {
+        "type": ["null", "integer"]
+      }
     },
     "labels": {
       "type": "array",
       "items": {
         "type": ["null", "object"],
         "properties": {
+          "app_url": {
+            "type": "string"
+          },
+          "archived": {
+            "type": "boolean"
+          },
           "color": {
-            "type": ["string","null"]
+            "type": "string"
           },
           "created_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "entity_type": {
+            "type": "string"
           },
           "external_id": {
             "type": ["string","null"]
@@ -77,14 +141,36 @@
         }
       }
     },
+    "lead_time": {
+      "type": "integer"
+    },
     "linked_file_ids": {
       "type": "array",
       "items": {
         "type": ["null", "integer"]
       }
     },
+    "member_mention_ids": {
+       "type": "array",
+        "items": {
+         "type": ["null", "string"]
+        }
+     },
+    "mention_ids": {
+       "type": "array",
+        "items": {
+         "type": ["null", "string"]
+        }
+     },
+    "moved_at": {
+            "type": "string",
+            "format": "date-time"
+          },
     "name": {
       "type": "string"
+    },
+    "num_tasks_completed": {
+      "type": "integer"
     },
     "owner_ids": {
       "type": "array",
@@ -95,15 +181,39 @@
     "position": {
       "type": "integer"
     },
+    "previous_iteration_ids": {
+      "type": "array",
+      "items": {
+        "type": ["null", "integer"]
+      }
+    },
     "project_id": {
       "type": "integer"
     },
     "requested_by_id": {
       "type": "string"
     },
+    "started": {
+      "type": "boolean"
+    },
     "started_at": {
       "type": ["string","null"],
       "format": "date-time"
+    },
+    "started_at_override": {
+      "type": ["string","null"],
+      "format": "date-time"
+    },
+    "stats": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "num_related_documents": {
+          "type": "integer"
+        }
+      }
     },
     "story_links": {
       "type": "array",
@@ -113,6 +223,9 @@
           "created_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "entity_type": {
+            "type": "string"
           },
           "id": {
             "type": "integer"
@@ -136,6 +249,9 @@
         }
       }
     },
+    "story_template_id": {
+      "type": "string"
+    },
     "story_type": {
       "type": "string"
     },
@@ -148,6 +264,9 @@
     "updated_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "workflow_id": {
+      "type": "integer"
     },
     "workflow_state_id": {
       "type": "integer"

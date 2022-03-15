@@ -4,6 +4,9 @@
     "abbreviation": {
       "type": "string"
     },
+    "app_url": {
+      "type": "string"
+    },
     "archived": {
       "type": "boolean"
     },
@@ -20,13 +23,25 @@
     "description": {
       "type": "string"
     },
+    "entity_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "external_id": {
-      "type": ["string","null"]
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "follower_ids": {
       "type": "array",
       "items": {
-        "type": ["null", "string"]
+        "type": [
+          "null",
+          "string"
+        ]
       }
     },
     "id": {
@@ -36,28 +51,41 @@
       "type": "integer"
     },
     "name": {
-      "type": "description"
-    },
-    "num_points": {
-      "type": "integer"
-    },
-    "num_stories": {
-      "type": "integer"
+      "type": "string"
     },
     "show_thermometer": {
       "type": "boolean"
-    },
-
-    "name": {
-      "type": "string"
     },
     "start_time": {
       "type": "string",
       "format": "date-time"
     },
+    "stats": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "num_points": {
+          "type": "integer"
+        },
+        "num_related_documents": {
+          "type": "integer"
+        },
+        "num_stories": {
+          "type": "integer"
+        }
+      }
+    },
+    "team_id": {
+      "type": "integer"
+    },
     "updated_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "workflow_id": {
+      "type": "integer"
     }
   }
 }
