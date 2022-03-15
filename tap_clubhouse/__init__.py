@@ -8,7 +8,7 @@ from operator import itemgetter
 import requests
 import singer
 
-import utils
+from tap_clubhouse import utils
 
 
 REQUIRED_CONFIG_KEYS = ["api_token", "start_date"]
