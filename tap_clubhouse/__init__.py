@@ -8,20 +8,20 @@ from operator import itemgetter
 import requests
 import singer
 
-from tap_clubhouse import utils
+import utils
 
 
 REQUIRED_CONFIG_KEYS = ["api_token", "start_date"]
-BASE_URL = "https://api.clubhouse.io"
+BASE_URL = "https://api.app.shortcut.com"
 CONFIG = {}
 STATE = {}
 
 ENDPOINTS = {
-    "stories": "/api/beta/stories/search",
-    "workflows": "/api/beta/workflows",
-    "users": "/api/beta/users",
-    "epics": "/api/beta/epics",
-    "projects": "/api/beta/projects"
+    "stories": "/api/v3/stories/search",
+    "workflows": "/api/v3/workflows",
+    "members": "/api/v3/members",
+    "epics": "/api/v3/epics",
+    "projects": "/api/v3/projects"
 }
 
 LOGGER = singer.get_logger()
@@ -42,7 +42,9 @@ def request(url, params=None, data=None):
         verb = "GET"
         data = {}
 
-    headers = {}
+    headers = {
+        "Shortcut-Token": CONFIG["api_token"],
+    }
     if "user_agent" in CONFIG:
         headers["User-Agent"] = CONFIG["user_agent"]
 
@@ -80,16 +82,8 @@ def get_start(entity):
 def gen_request(entity, params=None, data=None):
     url = get_url(entity)
     params = params or {}
-    params["token"] = CONFIG["api_token"]
     data = data or {}
     rows = request(url, params, data).json()
-
-    # fix clubhouse user not having created_at/updated_at
-    if entity == "users":
-        for row in rows:
-            permission = row["permissions"][0]
-            row["created_at"] = permission["created_at"]
-            row["updated_at"] = permission["updated_at"]
 
     for row in sorted(rows, key=itemgetter("updated_at")):
         yield row
@@ -132,7 +126,7 @@ def do_sync():
     sync_time_filtered("workflows")
     sync_time_filtered("epics")
     sync_time_filtered("projects")
-    sync_time_filtered("users")
+    sync_time_filtered("members")
 
     LOGGER.info("Completed sync")
 
