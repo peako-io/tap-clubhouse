@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import time
 import datetime
 from operator import itemgetter
 
 import requests
 import singer
-
-from tap_clubhouse import utils
 
 
 REQUIRED_CONFIG_KEYS = ["api_token", "start_date"]
@@ -32,7 +31,7 @@ def get_url(endpoint):
     return BASE_URL + ENDPOINTS[endpoint]
 
 
-@utils.ratelimit(100, 60)
+@singer.utils.ratelimit(100, 60)
 def request(url, params=None, data=None):
     params = params or {}
 
@@ -73,8 +72,8 @@ def get_start(entity):
         # Munge the date in the state due to how Clubhouse behaves. Clubhouse keeps
         # returning the same record on subsequent runs because it treats
         # `updated_at_start` as inclusive
-        start = utils.strptime(STATE[entity])
-        STATE[entity] = utils.strftime(start + datetime.timedelta(seconds=1))
+        start = singer.utils.strptime(STATE[entity])
+        STATE[entity] = singer.utils.strftime(start + datetime.timedelta(seconds=1))
 
     return STATE[entity]
 
@@ -90,7 +89,7 @@ def gen_request(entity, params=None, data=None):
 
 
 def sync_stories():
-    singer.write_schema("stories", utils.load_schema("stories"), ["id"])
+    singer.write_schema("stories", load_schema("stories"), ["id"])
 
     start = get_start("stories")
     data = {
@@ -99,7 +98,7 @@ def sync_stories():
 
     for _, row in enumerate(gen_request("stories", data=data)):
         LOGGER.info("Story {}: Syncing".format(row["id"]))
-        utils.update_state(STATE, "stories", row["updated_at"])
+        singer.utils.update_state(STATE, "stories", row["updated_at"])
         singer.write_record("stories", row)
 
     singer.write_state(STATE)
@@ -107,16 +106,24 @@ def sync_stories():
 
 def sync_time_filtered(entity):
     LOGGER.info("Entity Syncing: " + entity)
-    singer.write_schema(entity, utils.load_schema(entity), ["id"])
+    singer.write_schema(entity, load_schema(entity), ["id"])
     start = get_start(entity)
 
     LOGGER.info("Syncing {} from {}".format(entity, start))
     for row in gen_request(entity):
         if row["updated_at"] >= start:
-            utils.update_state(STATE, entity, row["updated_at"])
+            singer.utils.update_state(STATE, entity, row["updated_at"])
             singer.write_record(entity, row)
 
     singer.write_state(STATE)
+
+
+def load_schema(entity):
+    return singer.utils.load_json(get_abs_path("schemas/{}.json".format(entity)))
+
+
+def get_abs_path(path):
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
 
 
 def do_sync():
@@ -132,9 +139,10 @@ def do_sync():
 
 
 def main():
-    config, state = utils.parse_args(REQUIRED_CONFIG_KEYS)
-    CONFIG.update(config)
-    STATE.update(state)
+    args = singer.utils.parse_args(["api_token", "start_date"])
+    args.config["api_token"] = args.config["api_token"].strip()
+    CONFIG.update(args.config)
+    STATE.update(args.state)
     do_sync()
 
 
